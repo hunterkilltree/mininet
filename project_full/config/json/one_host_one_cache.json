@@ -1,0 +1,22 @@
+{
+    "NetworkId": "3node",
+    "OriginServer": [
+  { "Id": "mainServer",  "Ip": "10.0.0.9" }
+    ],
+    "CacheServers": [
+	{ "Id": "cache1",  "Ip": "10.0.0.5"},
+	{ "Id": "cache2",  "Ip": "10.0.0.6"},
+	{ "Id": "cache3",  "Ip": "10.0.0.7"}
+    ],
+    "Links": [
+	{ "EdgeNodeIds": ["node1",  "node2"], "Cost": 1.0 },
+	{ "EdgeNodeIds": ["node2",  "node3"], "Cost": 1.0 },
+	{ "EdgeNodeIds": ["node3",  "node1"], "Cost": 1.0 },
+	{ "EdgeNodeIds": ["origin", "node1"], "Cost": 1.0 }
+    ],
+    "Clients": [
+	{ "UpstreamId": "client1", "TrafficWeight": 1.0, "Ip": "10.0.0.1"},
+	{ "UpstreamId": "client2", "TrafficWeight": 1.0, "Ip": "10.0.0.2"},
+	{ "UpstreamId": "client3", "TrafficWeight": 1.0, "Ip": "10.0.0.3"}
+    ]
+}
