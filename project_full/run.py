@@ -9,7 +9,7 @@ from mininet.log import setLogLevel, info
 from mininet.link import TCLink, Intf
 from subprocess import call
 
-
+import time
 import argparse
 import json
 
@@ -18,7 +18,7 @@ BANDWITH = 10 #  bw is expressed as a number in Mbit
 DELAY = '10ms'
 Max_Queue_Size = 1000 # maximum queue size of  1000 packets using the Hierachical token bucket rate limiter and netem delay/loss
 Uses_Htb = True # ??????
-LOSS  = 10
+LOSS  = 10 # expressed as a percentage (between 0 and 100)
 
 
 def setup_dir(host):
@@ -30,11 +30,25 @@ def setup_dir(host):
         i.cmd(goFolder)
     return host
 
+def get_dir(host):
+    host_dir = []
+
+    for i in host:
+        directory = i.cmd('pwd')
+        directory = directory.replace('\r\n', '')
+        host_dir.append(directory)
+
+    return host_dir
+
 def deconstructor(host):
     for i in host:
         i.cmd('cd ..')
         removeFolder = 'rmdir ' + str(i)
         i.cmd(removeFolder)
+
+def open_port(host):
+    for i in host:
+        i.cmd('python -m SimpleHTTPServer 80 2> /tmp/http.log &')
 
 
 
@@ -79,16 +93,22 @@ def myNetwork(networkInfor):
 
     info( '*** Post configure switches and hosts\n')
     # set up directory
+    server[0].cmd('cd data/mainServer')
     caches = setup_dir(caches)
     clients = setup_dir(clients)
-    server[0].cmd('cd data/mainServer')
 
 
-    print(server[0].cmd('pwd'))
+    # get directory
+    caches_dir = get_dir(caches)
+    clients_dir = get_dir(clients)
+    #server_dir = get_dir(server)
+    #print(server_dir)
+    server_dir = server[0].cmd('pwd')
 
-
-
-
+    # open port 80 get data
+    open_port(caches)
+    open_port(server)
+    time.sleep(1) # 1s
 
     CLI(net)
     deconstructor(caches)
@@ -100,11 +120,6 @@ def my_test(topology):
         data = complex_data.read()
 
     jsonData = json.loads(data)
-
-    # process complex_data
-    print ('Topology name: {}'.format(jsonData['NetworkId']))
-    for numberOfClients in jsonData['Clients']:
-        print ('IP : {}'.format(numberOfClients['UpstreamId']))
 
     return jsonData
 
