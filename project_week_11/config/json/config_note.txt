@@ -1,0 +1,3 @@
++ Forwarding_IP cua interface router phai chung subnet voi IP cua host connect toi
++ Forwarding_IP cua interface eth0 phai chung subnet voi IP cua chinh router vi du: router_IP: 10.0.0.1/10 thi eth0 phai connect toi host chung subnet voi router, cu the mainServer 10.0.0.2/10
+

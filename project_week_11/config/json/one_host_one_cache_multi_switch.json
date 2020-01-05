@@ -1,0 +1,33 @@
+{
+    "NetworkId": "one_host_one_cache_multi_switch",
+    "OriginServer": [
+        { "ID": "mainServer",  "IP": "192.168.0.2/24", "defaultRoute": "192.168.0.1"}
+    ],
+    "CacheServers": [
+        { "ID": "cache_1",  "IP": "192.168.1.2/26", "defaultRoute": "192.168.1.1"}
+    ],
+    "Clients": [
+        { "ID": "client_1", "IP": "192.168.1.66/26", "defaultRoute": "192.168.1.65"},
+        { "ID": "client_2", "IP": "192.168.2.2/24", "defaultRoute": "192.168.2.1"}
+    ],
+    "Routers": [
+        {   "ID": "router_1",
+            "defaultIP": "192.168.0.1/24"
+        },
+        {   "ID": "router_2",
+            "defaultIP": "192.168.1.1/24"
+        },
+        {   "ID": "router_3",
+            "defaultIP": "192.168.2.1/24"
+        }
+    ],
+    "Links": [
+        { "NodeIds": ["router_1/eth1", "mainServer"], "params1": {"bw": 30, "delay": "1us", "ip": "192.168.0.1/24"}},
+        { "NodeIds": ["router_2/eth1", "cache_1"], "params1": {"bw": 30, "delay": "1us", "ip": "192.168.1.1/26"}},
+        { "NodeIds": ["router_2/eth2", "client_1"], "params1": {"bw": 30, "delay": "1us", "ip": "192.168.1.65/26"}},
+        { "NodeIds": ["router_3/eth1", "client_2"], "params1": {"bw": 30, "delay": "1us", "ip": "192.168.2.1/24"}},
+        
+        { "NodeIds": ["router_1/eth2", "router_2/eth3"], "params1": {"bw": 30, "delay": "1us", "ip": "10.0.0.1/26"}, "params2": {"ip": "10.0.0.2/26"}},
+        { "NodeIds": ["router_1/eth3", "router_3/eth2"], "params1": {"bw": 30, "delay": "1us", "ip": "10.0.1.65/24"}, "params2": {"ip": "10.0.1.66/26"}}
+    ]
+}
